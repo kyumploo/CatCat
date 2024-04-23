@@ -22,7 +22,7 @@ class OverworldMap {
 //configurations of the different maps
 window.OverworldMaps = {
     DemoRoom: {
-        lowerSrc: "/img/map1.png",
+        lowerSrc: "./img/map1.png",
         upperSrc: "",
         gameObjects: {
             hero: new Person({
@@ -34,15 +34,15 @@ window.OverworldMaps = {
             npc1: new Person({
                 x: utils.withGrid(5),
                 y: utils.withGrid(11),
-                src: "/img/catcat.png"
+                src: "./img/catcat.png"
             })
         }
     },
 
     //test
     Kitchen: {
-        lowerSrc: "/img/map1.png",
-        upperSrc: "/img/map1.png",
+        lowerSrc: "./img/map1.png",
+        upperSrc: "./img/map1.png",
         gameObjects: {
             hero: new GameObject({
                 x: 11,
@@ -52,7 +52,7 @@ window.OverworldMaps = {
             npc1: new GameObject({
                 x: 6,
                 y: 10,
-                src: "/img/catcat.png"
+                src: "./img/catcat.png"
             })
         }
     },
