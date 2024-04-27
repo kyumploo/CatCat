@@ -29,7 +29,9 @@ class Overworld {
             this.map.drawLowerImage(this.ctx,cameraPerson);
 
             //draw game objects
-            Object.values(this.map.gameObjects).forEach(object => {
+            Object.values(this.map.gameObjects).sort((a,b) => {
+                return a.y - b.y;
+            }).forEach(object => {
                 //make the character move dynamicly
 
                 object.sprite.draw(this.ctx, cameraPerson);
@@ -46,9 +48,28 @@ class Overworld {
         step();
     }
 
+    bindActionInput() {
+        new KeyPressListener("Enter", () => {
+            //Is there a person here to talk to?
+            this.map.checkForActionCutscene()
+        })
+    }
+
+    bindHeroPositionCheck() {
+        document.addEventListener("PersonWalkingComplete", e => {
+            if(e.detail.whoId === "hero"){
+                //Hero's position is changed
+                this.map.checkForFootstepCutscene()
+            }
+        })
+    }
+
     init() {
         this.map = new OverworldMap(window.OverworldMaps.DemoRoom);
         this.map.mountObjects();
+
+        this.bindActionInput();
+        this.bindHeroPositionCheck();
 
         this.directionInput = new DirectionInput();
         this.directionInput.init();
@@ -56,8 +77,27 @@ class Overworld {
         this.startGameLoop();
         //console.log("Hello from the Overworld", this);
 
-        //tell the over
-       
+        
+        
+        this.map.startCutscene([
+            //walk
+            { who: "npcA", type: "walk", direction: "right" },
+            { who: "npcA", type: "walk", direction: "right" },
+            { who: "npcA", type: "walk", direction: "down" },
+            { who: "npcA", type: "walk", direction: "down" },
+            { who: "hero", type: "walk", direction: "left" },
+            { who: "hero", type: "walk", direction: "left" },
+            { who: "hero", type: "walk", direction: "down" },
+            { who: "hero", type: "walk", direction: "down" },
+            { who: "hero", type: "walk", direction: "down" },
+            { who: "npcA", type: "stand", direction: "up", time: 800 },
+            { type: "textMessage", text: "Meow!"},
+            { who: "npcA", type: "walk", direction: "left" },
+            { who: "npcA", type: "walk", direction: "left" },
+            { who: "npcA", type: "walk", direction: "up" },
+            { who: "npcA", type: "walk", direction: "up" },
+            
+        ])
 
 
         

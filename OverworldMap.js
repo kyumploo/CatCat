@@ -1,6 +1,7 @@
 class OverworldMap {
     constructor(config) {
         this.gameObjects = config.gameObjects;
+        this.cutsceneSpaces = config.cutsceneSpaces || {};
 
         //set up a wall
         this.walls = config.walls || {};
@@ -10,6 +11,8 @@ class OverworldMap {
 
         this.upperImage = new Image();
         this.upperImage.src = config.upperSrc;
+
+        this.isCutscenePlaying = false;
         //two different images to be drawn
     }
 
@@ -28,11 +31,53 @@ class OverworldMap {
     }
 
     mountObjects() {
-        Object.values(this.gameObjects).forEach(o => {
+        Object.keys(this.gameObjects).forEach(key => {
+
+            let object = this.gameObjects[key];
+            object.id = key;
             //Todo: determine if this object should actually mount
 
-            o.mount(this);
+            object.mount(this);
         })
+    }
+
+    async startCutscene(events) {
+        this.isCutscenePlaying = true;
+
+        //start a loop of async events
+        //await each one
+
+        for (let i=0; i<events.length; i++) {
+            const eventHandler = new OverworldEvent({
+                event: events[i],
+                map: this,
+            })
+            await eventHandler.init();
+        }
+        this.isCutscenePlaying = false;
+
+        //reset NPCs to do their idle behavior
+        Object.values(this.gameObjects).forEach(object => object.doBehaviorEvent(this))
+    }
+
+    //check the position of the hero
+    checkForFootstepCutscene() {
+        const hero = this.gameObjects["hero"];
+        const match = this.cutsceneSpaces[`${hero.x},${hero.y}`];
+        if (!this.isCutscenePlaying && match) {
+            this.startCutscene( match[0].events )
+        }
+    }
+
+    checkForActionCutscene() {
+        const hero = this.gameObjects["hero"];
+        const nextCoords = utils.nextPosition(hero.x, hero.y, hero.direction);
+        const match = Object.values(this.gameObjects).find(object => {
+            return `${object.x},${object.y}` === `${nextCoords.x},${nextCoords.y}`
+        });
+        if (!this.isCutscenePlaying && match && match.talking.length) {
+            this.startCutscene(match.talking[0].events)
+        }
     }
 
     //add wall for game objects
@@ -62,11 +107,31 @@ window.OverworldMaps = {
                 y: utils.withGrid(8),
             }),
 
-            npc1: new Person({
-                x: utils.withGrid(5),
-                y: utils.withGrid(11),
-                src: "./img/catcat.png"
-            })
+            npcA: new Person({
+                x: utils.withGrid(6),
+                y: utils.withGrid(10),
+                src: "./img/catcat.png",
+                behaviorLoop: [
+                    //{ type: "walk", direction: "left"},
+                    { type: "stand", direction: "up", time: 800},
+                    { type: "stand", direction: "right", time: 800},
+                    { type: "stand", direction: "down", time: 800},
+                    { type: "stand", direction: "left", time: 800},
+                    //{ type: "walk", direction: "up"},
+                    //{ type: "walk", direction: "right"},
+                    //{ type: "walk", direction: "down"},
+                ],
+                talking: [
+                    {
+                        events: [
+                            { type: "textMessage", text: "Meow", faceHero: "npcA"},
+                            { type: "textMessage", text: "Meow Meow"},
+                            //{who: "hero", type: "walk", direction:"up"},
+                        ]
+                    }
+                ]
+            }),
+
         },
 
         //wall
@@ -137,10 +202,49 @@ window.OverworldMaps = {
             [utils.asGridCoord(14,13)] : true,
         },
 
+        cutsceneSpaces:{
+            [utils.asGridCoord(7,13)]: [
+                {
+                   events: [
+                    {who: "npcA", type:"walk", direction:"down"},
+                    {who: "npcA", type:"walk", direction:"down"},
+                    {who: "npcA", type:"walk", direction:"right"},
+                    {who: "npcA", type:"stand", direction:"down"},
+                    {who: "hero", type:"stand", direction:"up"},
+                    {type: "textMessage", text:"You can't leave the house!"},
+                    {who: "npcA", type:"walk", direction:"left"},
+                    {who: "npcA", type:"walk", direction:"up"},
+                    {who: "npcA", type:"walk", direction:"up"},
+                    {who: "hero", type:"walk", direction:"up"},
+    
+                   ] 
+                }
+            ],
+            [utils.asGridCoord(8,13)]: [
+                {
+                   events: [
+                    {who: "npcA", type:"walk", direction:"down"},
+                    {who: "npcA", type:"walk", direction:"down"},
+                    {who: "npcA", type:"walk", direction:"right"},
+                    {who: "npcA", type:"walk", direction:"right"},
+                    {who: "npcA", type:"stand", direction:"down"},
+                    {who: "hero", type:"stand", direction:"up"},
+                    {type: "textMessage", text:"You can't leave the house!"},
+                    {who: "npcA", type:"walk", direction:"left"},
+                    {who: "npcA", type:"walk", direction:"left"},
+                    {who: "npcA", type:"walk", direction:"up"},
+                    {who: "npcA", type:"walk", direction:"up"},
+                    {who: "hero", type:"walk", direction:"up"},
+    
+                   ] 
+                }
+            ]
+        },
+
     },
 
     //test
-    Kitchen: {
+    Outside: {
         lowerSrc: "./img/map1.png",
         upperSrc: "./img/map1.png",
         gameObjects: {

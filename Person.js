@@ -4,6 +4,7 @@ class Person extends GameObject {
         super(config);
         //make character moving in grid+direction
         this.movingProgressRemaining = 0;
+        this.isStanding = false;
         this.isPlayerControlled = config.isPlayerControlled || false;
         this.directionUpdate = {
             "up": ["y", -1],
@@ -22,7 +23,7 @@ class Person extends GameObject {
             //
 
             //case: we're keyboard ready and have an arrow pressed
-            if (this.isPlayerControlled && state.arrow) {
+            if (!state.map.isCutscenePlaying && this.isPlayerControlled && state.arrow) {
                 this.startBehavior(state, {
                     type: "walk",
                     direction: state.arrow
@@ -39,11 +40,26 @@ class Person extends GameObject {
         //stop here if space is not free
         if (behavior.type === "walk") {
             if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
+
+                behavior.retry && setTimeout(() => {
+                    this.startBehavior(state, behavior)
+                }, 10)
                 return;
             }
             //ready to walk
             state.map.moveWall(this.x, this.y, this.direction);
             this.movingProgressRemaining= 16;
+            this.updateSprite(state);
+        }
+
+        if (behavior.type === "stand"){
+            this.isStanding = true;
+            setTimeout(() => {
+                utils.emitEvent("PersonStandComplete", {
+                    whoId: this.id
+                })
+                this.isStanding = false;
+            }, behavior.time)
         }
     }
 
@@ -51,6 +67,16 @@ class Person extends GameObject {
             const [property, change] = this.directionUpdate[this.direction]
             this[property] += change;
             this.movingProgressRemaining -= 1;
+            
+            //check if it's 0
+            
+            if (this.movingProgressRemaining === 0){
+                //finished the walk
+                
+                utils.emitEvent("PersonWalkingComplete", {
+                    whoId: this.id
+                })
+            }
         
     }
 

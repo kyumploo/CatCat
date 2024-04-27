@@ -1,0 +1,42 @@
+:root {
+    --border-color: rgb(59, 53, 56);
+    --dialogue-background: rgb(185, 179, 181);
+
+    --menu-background: rgb(222, 193, 206);
+    --menu-border-color: rgb(128, 98, 111);
+    --menu-font-color: rgb(50, 43, 44);
+}
+
+.pixelify-sans {
+    font-family: "Pixelify Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+* {
+    box-sizing: border-box;
+    font-family: "Pixelify Sans", sans-serif;
+}
+
+
+body {
+    background-color: #2b2828;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.game-container {
+    position: relative;
+    width: 456px;
+    height: 256px;
+    margin: 0 auto;
+    outline: 1px solid var(--menu-border-color);
+
+    transform: scale(2) translateY(50%);
+}
+
+.game-container canvas {
+    image-rendering: pixelated;
+}
