@@ -2,9 +2,9 @@
     --border-color: rgb(59, 53, 56);
     --dialogue-background: rgb(185, 179, 181);
 
-    --menu-background: rgb(222, 193, 206);
-    --menu-border-color: rgb(128, 98, 111);
-    --menu-font-color: rgb(50, 43, 44);
+    --menu-background: rgb(246, 191, 215);
+    --menu-border-color: #0000ff;
+    --menu-font-color: #0000ff;
 }
 
 .pixelify-sans {
@@ -21,7 +21,7 @@
 
 
 body {
-    background-color: #2b2828;
+    background-color: #222020;
     padding: 0;
     margin: 0;
     overflow: hidden;
@@ -29,12 +29,12 @@ body {
 
 .game-container {
     position: relative;
-    width: 456px;
+    width: 350px;
     height: 256px;
     margin: 0 auto;
     outline: 1px solid var(--menu-border-color);
 
-    transform: scale(2) translateY(50%);
+    transform: scale(2.2) translateY(50%);
 }
 
 .game-container canvas {

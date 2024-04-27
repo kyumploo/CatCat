@@ -110,7 +110,7 @@ window.OverworldMaps = {
             npcA: new Person({
                 x: utils.withGrid(6),
                 y: utils.withGrid(10),
-                src: "./img/catcat.png",
+                src: "./img/catcat2.png",
                 behaviorLoop: [
                     //{ type: "walk", direction: "left"},
                     { type: "stand", direction: "up", time: 800},
@@ -124,13 +124,78 @@ window.OverworldMaps = {
                 talking: [
                     {
                         events: [
-                            { type: "textMessage", text: "Meow", faceHero: "npcA"},
-                            { type: "textMessage", text: "Meow Meow"},
+                            { type: "textMessage", text: "...", faceHero: "npcA"},
+                            { type: "textMessage", text: "Meow..."},
                             //{who: "hero", type: "walk", direction:"up"},
                         ]
                     }
                 ]
             }),
+
+            cd: new Person({
+                x: utils.withGrid(14),
+                y: utils.withGrid(8),
+                src: "./img/cd.png",
+                behaviorLoop: [
+                ],
+                talking: [
+                    {
+                        events: [
+                            { type: "textMessage", text: "A compact disk. Wonder what's stored inside.", faceHero: "npcA"},
+                    
+                        ]
+                    }
+                ]
+            }),
+
+            diary: new Person({
+                x: utils.withGrid(10),
+                y: utils.withGrid(4),
+                src: "./img/diary.png",
+                behaviorLoop: [
+                ],
+                talking: [
+                    {
+                        events: [
+                            { type: "textMessage", text: "A notebook. Looks like a diary.", faceHero: "npcA"},
+                    
+                        ]
+                    }
+                ]
+            }),
+
+            knife: new Person({
+                x: utils.withGrid(2),
+                y: utils.withGrid(7),
+                src: "./img/knife.png",
+                behaviorLoop: [
+                ],
+                talking: [
+                    {
+                        events: [
+                            { type: "textMessage", text: "A kitchen knife.", faceHero: "npcA"},
+                    
+                        ]
+                    }
+                ]
+            }),
+
+            pasta: new Person({
+                x: utils.withGrid(6),
+                y: utils.withGrid(6),
+                src: "./img/pasta.png",
+                behaviorLoop: [
+                ],
+                talking: [
+                    {
+                        events: [
+                            { type: "textMessage", text: "Some left over pasta...", faceHero: "npcA"},
+                    
+                        ]
+                    }
+                ]
+            }),
+
 
         },
 
@@ -211,7 +276,8 @@ window.OverworldMaps = {
                     {who: "npcA", type:"walk", direction:"right"},
                     {who: "npcA", type:"stand", direction:"down"},
                     {who: "hero", type:"stand", direction:"up"},
-                    {type: "textMessage", text:"You can't leave the house!"},
+                    {type: "textMessage", text:"..."},
+                    {type: "textMessage", text:"You can't leave the house..."},
                     {who: "npcA", type:"walk", direction:"left"},
                     {who: "npcA", type:"walk", direction:"up"},
                     {who: "npcA", type:"walk", direction:"up"},
@@ -229,7 +295,8 @@ window.OverworldMaps = {
                     {who: "npcA", type:"walk", direction:"right"},
                     {who: "npcA", type:"stand", direction:"down"},
                     {who: "hero", type:"stand", direction:"up"},
-                    {type: "textMessage", text:"You can't leave the house!"},
+                    {type: "textMessage", text:"..."},
+                    {type: "textMessage", text:"You can't leave the house..."},
                     {who: "npcA", type:"walk", direction:"left"},
                     {who: "npcA", type:"walk", direction:"left"},
                     {who: "npcA", type:"walk", direction:"up"},
@@ -244,7 +311,7 @@ window.OverworldMaps = {
     },
 
     //test
-    Outside: {
+    /*Outside: {
         lowerSrc: "./img/map1.png",
         upperSrc: "./img/map1.png",
         gameObjects: {
@@ -259,6 +326,6 @@ window.OverworldMaps = {
                 src: "./img/catcat.png"
             })
         }
-    },
+    },*/
    
 }
