@@ -35,6 +35,7 @@ body {
     outline: 1px solid var(--menu-border-color);
 
     transform: scale(2.2) translateY(50%);
+    background-color: var(--menu-border-color);
 }
 
 .game-container canvas {
